@@ -1,15 +1,14 @@
 define(function (require, exports, module) {
-  var inCharset = require('../../../src/inCharset');
-  inCharset.options({action: '../../src/getEncodeStr.html'});
+  var inCharset = require('../../../libs/inCharset');
+  inCharset.options({action: '../../libs/getEncodeStr.html'});
 
   require('./case/base/index')(inCharset);
 
-  window.inCharset = inCharset;
-
-
   if (window.mochaPhantomJS) {
+    mochaPhantomJS.globals(['_inCharset']);
     mochaPhantomJS.run();
   } else {
+    mocha.globals(['_inCharset']);
     mocha.run();
   }
 });
