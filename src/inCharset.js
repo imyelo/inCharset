@@ -19,6 +19,7 @@
       // the name of iframe
       iframeName: '_urlEncode_iframe_',
     };
+    this._tasks = [];
     return this;
   };
   InCharset.prototype.initNamescape = function () {
@@ -47,41 +48,53 @@
   InCharset.prototype.get = function(str, charset, callback) {
     var self = this;
     // location.search would be '?id=' + id + '&str=' + str
-    var strInput, idInput, form, iframe, id;
     // just get a random value
-    id = (new Date()).getTime().toString(32) + '.' + Math.floor(Math.random() * 1024).toString(32);
-    idInput = document.createElement('input');
-    strInput = document.createElement('input');
-    form = document.createElement('form');
-    iframe = document.createElement('iframe');
-    idInput.type = 'hidden';
-    idInput.name = 'id';
-    idInput.value = id;
-    strInput.type = 'hidden';
-    strInput.name = 'str';
-    strInput.value = str;
-    form.method = 'get';
-    form.style.display = 'none';
-    form.acceptCharset = charset;
-    form.appendChild(idInput);
-    form.appendChild(strInput);
-    form.target = self._options.iframeName;
-    document.body.appendChild(form);
-    iframe.setAttribute('name', self._options.iframeName);
-    iframe.style.display = 'none';
-    iframe.width = "0";
-    iframe.height = "0";
-    iframe.scrolling = "no";
-    iframe.allowtransparency = "true";
-    iframe.frameborder = "0";
-    iframe.src = 'about:blank';
-    document.body.appendChild(iframe);
+    var id = (new Date()).getTime().toString(32) + '.' + Math.floor(Math.random() * 1024).toString(32);
+    var iframeName = self._options.iframeName + '.' + id;
+    var idInput = (function () {
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'id';
+      input.value = id;
+      return input;
+    })();
+    var strInput = (function () {
+      var input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'str';
+      input.value = str;
+      return input;
+    })();
+    var form = (function () {
+      var f = document.createElement('form');
+      f.method = 'get';
+      f.style.display = 'none';
+      f.acceptCharset = charset;
+      f.appendChild(idInput);
+      f.appendChild(strInput);
+      f.target = iframeName;
+      f.action = self._options.action;
+      document.body.appendChild(f);
+      return f;
+    })();
+    var iframe = (function () {
+      var ifr = document.createElement('iframe');
+      ifr.setAttribute('name', iframeName);
+      ifr.style.display = 'none';
+      ifr.width = "0";
+      ifr.height = "0";
+      ifr.scrolling = "no";
+      ifr.allowtransparency = "true";
+      ifr.frameborder = "0";
+      ifr.src = 'about:blank';
+      document.body.appendChild(ifr);
+      return ifr;
+    })();
     self.initNamescape();
     window[self._options.namescape]['callback'][id] = function (str) {
       callback(str);
       delete window[self._options.namescape]['callback'][id];
     };
-    form.action = self._options.action;
     form.submit();
     setTimeout(function() {
       form.parentNode.removeChild(form);
