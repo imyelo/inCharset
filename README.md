@@ -22,6 +22,10 @@ inCharset可以在requirejs或seajs下使用，即``require('inCharset')``。
 #### options.iframeName
 默认值为'_urlEncode_iframe_'。inCharset在实现时会借助于一个iframe，而这个iframe的name值将以该参数作为前缀命名。
 
+### get
+get方法需要三个参数，分别是需要转码的字符串、目标转码类型、回调函数。
+具体可参考**演示**
+
 ## 演示
 ### 对字符进行不同编码的urlencode。
 
