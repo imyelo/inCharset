@@ -1,0 +1,19 @@
+<html>
+<head>
+<meta http-equiv="pragma" content="no-cache" />
+</head>
+<script>
+  (function () {
+    var match, id, str;
+    match = location.search.match(/\?id=(.+)\&str=(.*)/);
+    if (match.length === 3) {
+      id = match[1];
+      str = match[2];
+    } else {
+      id = '';
+      str = '';
+    }
+    parent._inCharset.callback[id] && parent._inCharset.callback[id](str);
+  })();
+</script>
+</html>
