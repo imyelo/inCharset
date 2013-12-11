@@ -4,11 +4,10 @@ define(function (require, exports, module) {
 
   require('./case/base')(inCharset);
 
+  mocha.globals(['_inCharset']);
   if (window.mochaPhantomJS) {
-    mochaPhantomJS.globals(['_inCharset']);
     mochaPhantomJS.run();
   } else {
-    mocha.globals(['_inCharset']);
     mocha.run();
   }
 });

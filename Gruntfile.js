@@ -1,10 +1,7 @@
 module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    mocha: {
-      options: {
-        run: false
-      },
+    mocha_phantomjs: {
       cmd: ['test/cmd/index.html'],
       global: ['test/global/index.html']
     },
@@ -36,12 +33,12 @@ module.exports = function (grunt) {
     },
   });
 
-  grunt.loadNpmTasks('grunt-mocha');
+  grunt.loadNpmTasks('grunt-mocha-phantomjs');
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('test-noclean', ['copy:test', 'mocha:cmd', 'mocha:global']);
+  grunt.registerTask('test-noclean', ['copy:test', 'mocha_phantomjs:cmd', 'mocha_phantomjs:global']);
   grunt.registerTask('test', ['test-noclean', 'clean:test']);
   grunt.registerTask('dev', ['watch']);
   grunt.registerTask('default', ['dev']);
