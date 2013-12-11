@@ -101,7 +101,7 @@
       if (typeof iframe !== 'undefined') {
         iframe.parentNode.removeChild(iframe);
       }
-    }, 500000);
+    }, 500);
     return self;
   };
 
