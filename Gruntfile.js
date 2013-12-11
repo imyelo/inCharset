@@ -2,11 +2,15 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     mocha: {
-      cmd: ['test/cmd/index.html']
+      options: {
+        run: false
+      },
+      cmd: ['test/cmd/index.html'],
+      global: ['test/global/index.html']
     },
     clean: {
       test: {
-        src: ['test/cmd/app/case'],
+        src: ['test/cmd/app/case', 'test/global/app/case'],
         options: {
           force: true
         }
@@ -16,6 +20,7 @@ module.exports = function (grunt) {
       test: {
         files: [
           {expand: true, cwd: './test/case/', src: ['**'], dest: 'test/cmd/app/case/'},
+          {expand: true, cwd: './test/case/', src: ['**'], dest: 'test/global/app/case/'},
         ]
       }
     },
@@ -36,8 +41,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('test-noclean', ['copy:test', 'mocha:cmd']);
-  grunt.registerTask('test', ['copy:test', 'mocha:cmd', 'clean:test']);
+  grunt.registerTask('test-noclean', ['copy:test', 'mocha:cmd', 'mocha:global']);
+  grunt.registerTask('test', ['test-noclean', 'clean:test']);
   grunt.registerTask('dev', ['watch']);
   grunt.registerTask('default', ['dev']);
 

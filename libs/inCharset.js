@@ -105,5 +105,5 @@
     return self;
   };
 
-  module.exports = new InCharset();
+  return new InCharset();
 });
