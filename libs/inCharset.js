@@ -15,7 +15,7 @@
       // the location of getEncodeStr.html
       action: './getEncodeStr.html',
       // this variable will be setted in window
-      namescape: '_inCharset',
+      namespace: '_inCharset',
       // the name of iframe
       iframeName: '_urlEncode_iframe_',
     };
@@ -23,7 +23,7 @@
     return this;
   };
   InCharset.prototype._initNamescape = function () {
-    var ns = this._options.namescape;
+    var ns = this._options.namespace;
     if (!window[ns]) {
       window[ns] = {
         callback: {}
@@ -36,8 +36,8 @@
       if (opts.action) {
         this._options.action = opts.action;
       }
-      if (opts.namescape) {
-        this._options.namescape = opts.namescape;
+      if (opts.namespace) {
+        this._options.namespace = opts.namespace;
       }
       if (opts.iframeName) {
         this._options.iframeName = opts.iframeName;
@@ -91,9 +91,9 @@
       return ifr;
     })();
     self._initNamescape();
-    window[self._options.namescape]['callback'][id] = function (str) {
+    window[self._options.namespace]['callback'][id] = function (str) {
       callback(str);
-      delete window[self._options.namescape]['callback'][id];
+      delete window[self._options.namespace]['callback'][id];
     };
     form.submit();
     setTimeout(function() {
