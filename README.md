@@ -1,13 +1,12 @@
 # inCharset
-[![Codeship](https://www.codeship.io/projects/2f2959e0-4462-0131-b090-028493a8b6f3/status)](https://www.codeship.io/projects/10770)
+
+> inCharset解决了前端中不同编码的传递问题，也就是对字符串进行不同编码的urlencode。典型的案例如：在一个utf8编码的网页中，发送请求到另一个gbk编码的接口。  
+
+> **代码的原始拷贝和思路来自[zciii](http://zciii.com/blogwp/front-end-urldecode-gbk/)。**
+
 [![Build Status](https://travis-ci.org/imyelo/inCharset.png?branch=master)](https://travis-ci.org/imyelo/inCharset)
-
-## 介绍
-inCharset解决了前端中不同编码的传递问题，也就是对字符串进行不同编码的urlencode。典型的案例如：在一个utf8编码的网页中，发送请求到另一个gbk编码的接口。  
-
-
-**代码的原始拷贝和思路来自[zciii](http://zciii.com/blogwp/front-end-urldecode-gbk/)。**
-
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+[![Codeship](https://www.codeship.io/projects/2f2959e0-4462-0131-b090-028493a8b6f3/status)](https://www.codeship.io/projects/10770)
 
 ## 用法
 inCharset可以在requirejs或seajs下使用，即``require('inCharset')``。  
