@@ -8,7 +8,7 @@
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 [![Codeship](https://www.codeship.io/projects/2f2959e0-4462-0131-b090-028493a8b6f3/status)](https://www.codeship.io/projects/10770)
 
-## 用法
+## 使用
 inCharset可以在requirejs或seajs下使用，即``require('inCharset')``。  
 其他情况，则会将inCharset暴露到全局(window)中去，即``window.inCharset``。  
 
@@ -19,11 +19,16 @@ inCharset可以在requirejs或seajs下使用，即``require('inCharset')``。
 #### options.namespace
 默认值为'_inCharset'。inCharset在实现时会通过全局变量进行传递，而这些全局变量都会被包在以该参数命名的变量下。
 #### options.iframeName
-默认值为'_urlEncode_iframe_'。inCharset在实现时会借助于一个iframe，而这个iframe的name值将以该参数作为前缀命名。
+默认值为'_urlEncode_iframe_'。inCharset的实现借助于一个iframe，而这个iframe的name值将以该参数作为前缀命名，请确保该值的唯一性。
+#### options.timeout
+默认值为10000， 单位毫秒。假若超过该时长仍未得到响应，则会调用失败的回调函数，并传入错误信息为``'timeout'``。
 
 ### get
-get方法需要三个参数，分别是需要转码的字符串、目标转码类型、回调函数。
+``inCharset.get``带有四个参数，依次为需要转码的字符串(必须)、目标转码类型(必须)、成功回调函数、失败回调函数。
 具体可参考**演示**
+
+### abort
+``inCharset.get``返回的对象中包含一个``abort``方法，该方法借鉴了jQuery.ajax的设计，通过它可以中断对应的``inCharset.get``请求。你也可以向``abort``方法的第一个参数传入自定义的错误信息，否则默认的错误信息将为``'abort'``。。
 
 ## 演示
 ### 对字符进行不同编码的urlencode。
@@ -49,18 +54,46 @@ inCharset.get('中文', 'gbk', function (str) {
 });
 ```
 
-### 你也可以链式调用
+### 设置超时限制时长
 
 ``` js
-inCharset
-  .options({action: '../../libs/getEncodeStr.html'})
-  .get('中', 'gbk', function (str) {
-    console.log(str === '%D6%D0');
-  })
-  .get('文', 'gbk', function (str) {
-    console.log(str === '%CE%C4');
+inCharset.options({timeout: 5000});
+inCharset.get('中', 'gbk', function (str) {
+  console.log(str === '%D6%D0');
 });
 ```
+
+### 处理异常
+
+``` js
+var onSuccess = function (str) {
+  console.log(str === '%D6%D0');
+};
+var onError = function (err) {
+  console.error(err);
+};
+inCharset.get('中', 'gbk', onSuccess, onError);
+```
+
+### 中断未完成的inCharset.get请求
+
+``` js
+var onSuccess = function (str) {
+  console.log(str === '%D6%D0');
+};
+var onError = function (err) {
+  console.error(err);
+};
+var request = inCharset.get('中', 'gbk', onSuccess, onError);
+request.abort();
+// or request.abort('the message you want it be');
+```
+
+## 测试
+由于inCharset会借助DOM元素实现其业务，所以建议直接使用浏览器打开``/test``目录下的Mocha测试页面进行测试。  
+当然你也可以选择使用``grunt test``跳过浏览器测试。  
+
+*如果在浏览器下测试，注意需要首先执行``grunt copy:test``将case同步到不同的方案底下。*
 
 ## License
 MIT
