@@ -37,30 +37,6 @@
           });
         });
       });
-      describe('timeout', function () {
-        it('should be timeout', function (done) {
-          var counter = 0;
-          var tap = function () {
-            if (++counter === 2) {
-              done();
-            }
-          };
-          inCharset.options({timeout: 0});
-          inCharset.get('中', 'gbk', function (str) {
-            throw 'it should be timeout';
-          }, function (err) {
-            expect(err).to.be.equal('timeout');
-            tap();
-          });
-          inCharset.get('文', 'gbk', function (str) {
-            throw 'it should be timeout';
-          }, function (err) {
-            expect(err).to.be.equal('timeout');
-            tap();
-          });
-          inCharset.options({timeout: 10000});
-        });
-      });
       describe('abort', function () {
         it('should be aborted', function (done) {
           var counter = 0;
@@ -102,6 +78,92 @@
           setTimeout(function () {
             done();
           }, 400);
+        });
+        it('should be not emitted after success', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              throw 'should be not emitted after success';
+            }
+          };
+          var req = inCharset.get('中', 'gbk', function (str) {
+            expect(str).to.be.equal('%D6%D0');
+            tap();
+          }, function (err) {
+            expect(err).to.be.equal('abort');
+            tap();
+          });
+          setTimeout(function () {
+            req.abort();
+          }, 200);
+          setTimeout(function () {
+            done();
+          }, 1000);
+        });
+      });
+      describe('timeout', function () {
+        it('should be timeout', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              done();
+            }
+          };
+          inCharset.options({timeout: 0});
+          inCharset.get('中', 'gbk', function (str) {
+            throw 'it should be timeout';
+          }, function (err) {
+            expect(err).to.be.equal('timeout');
+            tap();
+          });
+          inCharset.get('文', 'gbk', function (str) {
+            throw 'it should be timeout';
+          }, function (err) {
+            expect(err).to.be.equal('timeout');
+            tap();
+          });
+          inCharset.options({timeout: 10000});
+        });
+        it('should be not emitted timeout after success', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              throw 'should be not emitted timeout after success';
+            }
+          };
+          inCharset.options({timeout: 600});
+          inCharset.get('中', 'gbk', function (str) {
+            expect(str).to.be.equal('%D6%D0');
+            tap();
+          }, function (err) {
+            expect(err).to.be.equal('timeout');
+            tap();
+          });
+          setTimeout(function () {
+            done();
+          }, 800);
+          inCharset.options({timeout: 10000});
+        });
+        it('should be not emitted timeout after abort', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              throw 'should be not emitted timeout after abort';
+            }
+          };
+          var req;
+          inCharset.options({timeout: 600});
+          req = inCharset.get('中', 'gbk', function (str) {
+            expect(str).to.be.equal('%D6%D0');
+            tap();
+          }, function (err) {
+            tap();
+          });
+          req.abort();
+          setTimeout(function () {
+            done();
+          }, 800);
+          inCharset.options({timeout: 10000});
         });
       });
       describe('use case', function () {

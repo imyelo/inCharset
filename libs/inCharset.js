@@ -95,30 +95,32 @@
       document.body.appendChild(ifr);
       return ifr;
     })();
-    var clear, abort, aborted;
-    aborted = false;
+    var clear, abort, timeoutObject, called;
+    called = false;
     clear = function () {
       delete window[self._options.namespace]['success'][id];
+      clearTimeout(timeoutObject);
     };
     self._initNamescape();
     window[self._options.namespace]['success'][id] = function (str) {
       if (typeof success === 'function') {
         success(str);
       }
+      called = true;
       clear();
     };
     abort = function (err) {
-      if (aborted) {
+      if (called) {
         return false;
       }
-      aborted = true;
       if (typeof error === 'function') {
         error((err || 'abort'));
       }
+      called = true;
       clear();
     };
     form.submit();
-    setTimeout(function () {
+    timeoutObject = setTimeout(function () {
       abort('timeout');
     }, self._options.timeout);
     setTimeout(function() {
