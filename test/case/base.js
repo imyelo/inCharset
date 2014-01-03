@@ -37,6 +37,73 @@
           });
         });
       });
+      describe('timeout', function () {
+        it('should be timeout', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              done();
+            }
+          };
+          inCharset.options({timeout: 0});
+          inCharset.get('中', 'gbk', function (str) {
+            throw 'it should be timeout';
+          }, function (err) {
+            expect(err).to.be.equal('timeout');
+            tap();
+          });
+          inCharset.get('文', 'gbk', function (str) {
+            throw 'it should be timeout';
+          }, function (err) {
+            expect(err).to.be.equal('timeout');
+            tap();
+          });
+          inCharset.options({timeout: 10000});
+        });
+      });
+      describe('abort', function () {
+        it('should be aborted', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              done();
+            }
+          };
+          var req = inCharset.get('中', 'gbk', function (str) {
+            throw 'it should be aborted';
+          }, function (err) {
+            expect(err).to.be.equal('abort');
+            tap();
+          });
+          req.abort();
+          req = inCharset.get('文', 'gbk', function (str) {
+            throw 'it should be custom message';
+          }, function (err) {
+            expect(err).to.be.equal('custom message');
+            tap();
+          });
+          req.abort('custom message');
+        });
+        it('should be not emitted twice', function (done) {
+          var counter = 0;
+          var tap = function () {
+            if (++counter === 2) {
+              throw 'it should be not emitted twice';
+            }
+          };
+          var req = inCharset.get('中', 'gbk', function (str) {
+            throw 'it should be aborted';
+          }, function (err) {
+            expect(err).to.be.equal('abort');
+            tap();
+          });
+          req.abort();
+          req.abort();
+          setTimeout(function () {
+            done();
+          }, 400);
+        });
+      });
       describe('use case', function () {
         it('multi tasks', function (done) {
           var counter = 0;
@@ -50,21 +117,6 @@
             tap();
           });
           inCharset.get('文', 'gbk', function (str) {
-            expect(str).to.be.equal('%CE%C4');
-            tap();
-          });
-        });
-        it('chainable', function (done) {
-          var counter = 0;
-          var tap = function () {
-            if (++counter === 2) {
-              done();
-            }
-          };
-          inCharset.get('中', 'gbk', function (str) {
-            expect(str).to.be.equal('%D6%D0');
-            tap();
-          }).get('文', 'gbk', function (str) {
             expect(str).to.be.equal('%CE%C4');
             tap();
           });
