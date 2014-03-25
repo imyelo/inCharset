@@ -16,15 +16,15 @@ inCharset可以在requirejs或seajs下使用，即``require('inCharset')``。
 其他情况，则会将inCharset暴露到全局(window)中去，即``window.inCharset``。  
 
 ### options
-在使用inCharset前，可以通过``require('inCharset').options(opts)``对其进行一些设置。
+在使用inCharset前，可以通过``require('inCharset').options(opts)``对其进行部分设置。
 #### optionns.action
 默认值为'./getEncodeStr.html'。请务必将该值设置为[getEncodeStr.html]()在当前网页的相对路径（或绝对路径）。
 #### options.namespace
-默认值为'_inCharset'。inCharset在实现时会通过全局变量进行传递，而这些全局变量都会被包在以该参数命名的变量下。
+默认值为'_inCharset'。inCharset的实现需要借助于全局变量，而这些全局变量都将存放在``window[options.namespace]``下，从而尽可能地保护其他全局变量。
 #### options.iframeName
-默认值为'_urlEncode_iframe_'。inCharset的实现借助于一个iframe，而这个iframe的name值将以该参数作为前缀命名，请确保该值的唯一性。
+默认值为'_urlEncode_iframe_'。inCharset的实现需要借助一个iframe，而这个iframe的name值将以该参数作为前缀命名，请确保该值的唯一性。
 #### options.timeout
-默认值为10000， 单位毫秒。假若超过该时长仍未得到响应，则会调用失败的回调函数，并传入错误信息为``'timeout'``。
+默认值为10000， 单位毫秒。假定超过该时长仍未得到响应，则会调用失败的回调函数，并传入错误信息为``'timeout'``。
 
 ### get
 ``inCharset.get``带有四个参数，依次为需要转码的字符串(必须)、目标转码类型(必须)、成功回调函数、失败回调函数。
