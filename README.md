@@ -1,12 +1,15 @@
 # inCharset
 
-> inCharset解决了前端中不同编码的传递问题，也就是对字符串进行不同编码的urlencode。典型的案例如：在一个utf8编码的网页中，发送请求到另一个gbk编码的接口。  
+> inCharset解决了前端中不同编码的传递问题，也就是对字符串进行不同编码的urlencode。典型的案例如：在一个utf8编码的网页中，发送请求到另一个只接受gbk编码的接口。  
 
 > **代码的原始拷贝和思路来自[zciii](http://zciii.com/blogwp/front-end-urldecode-gbk/)。**
 
 [![Build Status](https://travis-ci.org/imyelo/inCharset.png?branch=master)](https://travis-ci.org/imyelo/inCharset)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 [![Codeship](https://www.codeship.io/projects/2f2959e0-4462-0131-b090-028493a8b6f3/status)](https://www.codeship.io/projects/10770)
+
+## 后端？
+inCharset的实现借助了一个iframe以及一个html页面，因此并不适用于后端JS。如果你需要在Node.js中进行GBK的解码，除了使用[iconv-lite](https://github.com/ashtuchkin/iconv-lite)，也不妨参考[bound0的解决方案](https://github.com/imyelo/bound0-gbk)。
 
 ## 使用
 inCharset可以在requirejs或seajs下使用，即``require('inCharset')``。  
